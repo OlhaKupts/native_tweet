@@ -149,6 +149,8 @@ echo json_encode([
     "data" => $languages
 ]);
 
+exit;
+
 /*
 ------------------------------------------------------------
 GET /api/languages/users_by_language/?ids[]
