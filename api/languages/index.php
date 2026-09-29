@@ -151,87 +151,97 @@ echo json_encode([
 
 exit;
 
-/*
-------------------------------------------------------------
-GET /api/languages/users_by_language/?ids[]
-ids: array of ids of languages
-------------------------------------------------------------
-*/
+// /*
+//This code was breaking the language API endpoint
+//Added exit above to fix
+//Suggest that this move to a new endpoint.
+// Maybe:
+// GET /api/users_by_language/?ids[]
+//
+// also some more endpoints below might not 
+// fit on this endpoint due to the a
+//
+//
+// ------------------------------------------------------------
+// GET /api/languages/users_by_language/?ids[]
+// ids: array of ids of languages
+// ------------------------------------------------------------
+// */
 
-$usersByLanguagesIndex = array_search("users_by_language", $parts);
+// $usersByLanguagesIndex = array_search("users_by_language", $parts);
 
-if (
-    $usersByLanguagesIndex !== false &&
-    isset($parts[$usersByLanguagesIndex + 1]) &&
-    $parts[$usersByLanguagesIndex + 1] !== ""
-) {
-    $languageIds = $parts[$usersByLanguagesIndex + 1];
-}
+// if (
+//     $usersByLanguagesIndex !== false &&
+//     isset($parts[$usersByLanguagesIndex + 1]) &&
+//     $parts[$usersByLanguagesIndex + 1] !== ""
+// ) {
+//     $languageIds = $parts[$usersByLanguagesIndex + 1];
+// }
 
-if ($languageIds !== null) {
-    if (!ctype_digit($languageIds)) {
-        http_response_code(400);
+// if ($languageIds !== null) {
+//     if (!ctype_digit($languageIds)) {
+//         http_response_code(400);
 
-        echo json_encode([
-            "success" => false,
-            "message" => "Language ID must be numeric."
-        ]);
+//         echo json_encode([
+//             "success" => false,
+//             "message" => "Language ID must be numeric."
+//         ]);
 
-        exit;
-    }
+//         exit;
+//     }
 
-    $sql = "select * from users u 
-    join wf_spoken_languages sl on u.userid=wf_spoken_languages.userid 
-    where language_id in ($placeholders)";
+//     $sql = "select * from users u 
+//     join wf_spoken_languages sl on u.userid=wf_spoken_languages.userid 
+//     where language_id in ($placeholders)";
 
-    $placeholders = implode(',', str_repeat('?', count($array_data)));
+//     $placeholders = implode(',', str_repeat('?', count($array_data)));
 
-    $usersFound = WFDatabase::getDataFromSQL($sql,$placeholders);
-    if (!$usersFound) {
-        http_response_code(404);
+//     $usersFound = WFDatabase::getDataFromSQL($sql,$placeholders);
+//     if (!$usersFound) {
+//         http_response_code(404);
 
-        echo json_encode([
-            "success" => false,
-            "message" => "Language not found."
-        ]);
+//         echo json_encode([
+//             "success" => false,
+//             "message" => "Language not found."
+//         ]);
 
-        exit;
-    }
+//         exit;
+//     }
     
-    http_response_code(200);
+//     http_response_code(200);
     
-    echo json_encode([
-        "success" => true,
-        "data" => $usersFound
-    ]);
-}
+//     echo json_encode([
+//         "success" => true,
+//         "data" => $usersFound
+//     ]);
+// }
 
 
-/*
-------------------------------------------------------------
-GET /api/users/{id}/languages
+// /*
+// ------------------------------------------------------------
+// GET /api/users/{id}/languages
 
-Stub behavior: retrieves and post data to the user_spoken_languages table
-------------------------------------------------------------
-*/
+// Stub behavior: retrieves and post data to the user_spoken_languages table
+// ------------------------------------------------------------
+// */
 
-if ($method === "GET") {
-    http_response_code(200);
-    echo json_encode([
-        "success" => true,
-        "count" => 0,
-        "data" => []
-    ]);
-    exit;
-}
+// if ($method === "GET") {
+//     http_response_code(200);
+//     echo json_encode([
+//         "success" => true,
+//         "count" => 0,
+//         "data" => []
+//     ]);
+//     exit;
+// }
 
 
-if ($method === "POST") {
-    http_response_code(201);
-    echo json_encode([
-        "success" => true,
-        "message" => "Stub: language would be added here."
-    ]);
-    exit;
-}
+// if ($method === "POST") {
+//     http_response_code(201);
+//     echo json_encode([
+//         "success" => true,
+//         "message" => "Stub: language would be added here."
+//     ]);
+//     exit;
+// }
 
