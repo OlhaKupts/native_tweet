@@ -1,19 +1,10 @@
-This folder is a database migration tool.
+Native Tweet is a social network website that is designed for the Elizabethtown College community. The goal of this website/project is to allow students to connect with other students based on their country of origin, region, and or spoken language(s). 
 
+Features of this website includes the following: 
+- A user account registration, where the domain is only restricted within Elizabethtown College students
+- A user search where it allows you to search for students by country, region, and or spoken language
+- A language switching where it allows the users to switch the language of the website to a language they are best comfortable with
+- A user profile where it allows other users to view information about other students including their background.
+- A feature where it allows the user to connect with a user or users through direct messaging and or group chat.
 
-As we develop the application the database might need to change.
-
-Getting those changes to all users can be difficult.
-
-This folder attempts to streamline the process.
-
-If you go to this url, your database will be upgraded to the latest version.
-
-http://127.0.0.1/translator_coordinator/migration
-
-
-If you or your team need to update the database, you should follow these steps.
-1. Add one to the value of $latest_version in index.php on the third line of the file.
-2. Build a file names vX.php (X will be the new version number).
-3. In that file, create a variable $sql 
-4. Set $sql to a string of DDL statements needed to migrate the database to the correct state.
+The main goal of Native Tweet is to create a college-friendly website where students can connect with one another solely based on their country of origin, region, and spoken language. The website aims to help students meet others within the college community while learning about different countries, languages, and cultural backgrounds.
