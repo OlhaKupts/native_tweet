@@ -1,7 +1,7 @@
 <?PHP
 
 function url(){
-    $baseFilePath="/translator_coordinator/web";
+    $baseFilePath="/native_tweet/web";
     if(isset($_SERVER['HTTPS'])){
         $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
     }
