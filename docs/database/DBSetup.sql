@@ -236,6 +236,68 @@ CREATE TABLE IF NOT EXISTS  `group_to_languages` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table translator_coordinator_db.conversations
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS 'conversations' (
+  'conversation_id' INT NULL,
+  'conversation_type' VARCHAR(10) NULL DEFAULT 'direct or group',
+  'createdByID' INT NULL,
+  'createdOn' DATETIME NULL,
+  PRIMARY KEY (`conversation_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table translator_coordinator_db.conversation_participants
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS 'conversation_participants' (
+  'id' INT NOT NULL,
+  'last_read_message_id' INT NULL,
+  'conversation_id' INT NOT NULL,
+  'userid' INT NOT NULL,
+  'joinedOn' DATETIME NULL,
+  PRIMARY KEY (`id`),
+  INDEX fk_conversation_participants_conversations1_idx (`conversation_id` ASC) VISIBLE,
+  INDEX fk_conversation_participants_users1_idx (`userid` ASC) VISIBLE,
+  CONSTRAINT fk_conversation_participants_conversations1
+    FOREIGN KEY (`conversation_id`)
+    REFERENCES translator_coordinator_db.conversations (`conversation_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_conversation_participants_users1
+    FOREIGN KEY (`userid`)
+    REFERENCES translator_coordinator_db.users (`userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table translator_coordinator_db.messages
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS 'messages' (
+  'message_id' INT NOT NULL,
+  'conversation_id' INT NOT NULL,
+  'sender_id' INT NOT NULL,
+  'message_text' LONGTEXT NULL,
+  'sentOn' DATETIME NULL,
+  'is_deleted' INT NULL,
+  PRIMARY KEY ('message_id'),
+  INDEX fk_messages_conversations1_idx ('conversation_id' ASC) VISIBLE,
+  INDEX fk_messages_users1_idx ('sender_id' ASC) VISIBLE,
+  CONSTRAINT fk_messages_conversations1
+    FOREIGN KEY (`conversation_id`)
+    REFERENCES translator_coordinator_db.conversations (`conversation_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_messages_users1
+    FOREIGN KEY (`sender_id`)
+    REFERENCES translator_coordinator_db.users (`userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 -- ----------------------------------
 -- Add Data Section
 -- ----------------------------------
