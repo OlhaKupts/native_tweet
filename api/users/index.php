@@ -100,7 +100,7 @@ if ($routePart === 'login') {
     $user_login_sql = 'SELECT userid, password FROM users WHERE email = :email LIMIT 1';
     $login_params = [':email' => $email];
     $records = WFDatabase::getDatafromSQL($user_login_sql,$login_params);
-    $record = $records[0];
+    $record = $records[0] ?? null;
     if (!$record || !password_verify($userpassword, $record['password'])) {
         sendJson(401, [
             'success' => false,
