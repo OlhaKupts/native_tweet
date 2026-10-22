@@ -12,6 +12,8 @@
           <a href="<?PHP echo $url; ?>/index.php" class="w3-bar-item w3-button"><img src='<?PHP echo $url; ?>/images/logo.png' height='50px'></a>
           <!-- Right-sided navbar links. Hide them on small screens -->
           <div class="w3-right w3-hide-small">
+            <a href="<?PHP echo $url; ?>/index.php" class="w3-bar-item w3-button">Home</a>
+            <a href="<?PHP echo $url; ?>/map.php" class="w3-bar-item w3-button">World Map</a>
             <a href="<?PHP echo $url; ?>/about.php" class="w3-bar-item w3-button">About</a>
             <a href="<?PHP echo $url; ?>/search.php" class="w3-bar-item w3-button">Search</a>
             <a href="<?PHP echo $url; ?>/login.php?page=<?PHP echo strtolower($linkName); ?>" class="w3-bar-item w3-button"><?PHP echo $linkName; ?></a>
