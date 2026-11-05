@@ -259,8 +259,8 @@ CREATE TABLE IF NOT EXISTS `conversation_participants` (
   `userid` INT NOT NULL,
   `joinedOn` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX fk_conversation_participants_conversations1_idx (`conversation_id` ASC) VISIBLE,
-  INDEX fk_conversation_participants_users1_idx (`userid` ASC) VISIBLE,
+  INDEX fk_conversation_participants_conversations1_idx (`conversation_id` ASC),
+  INDEX fk_conversation_participants_users1_idx (`userid` ASC),
   CONSTRAINT fk_conversation_participants_conversations1
     FOREIGN KEY (`conversation_id`)
     REFERENCES `conversations` (`conversation_id`)
@@ -285,8 +285,8 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `sentOn` DATETIME NULL,
   `is_deleted` INT NULL,
   PRIMARY KEY (`message_id`),
-  INDEX fk_messages_conversations1_idx (`conversation_id` ASC) VISIBLE,
-  INDEX fk_messages_users1_idx (`sender_id` ASC) VISIBLE,
+  INDEX fk_messages_conversations1_idx (`conversation_id` ASC),
+  INDEX fk_messages_users1_idx (`sender_id` ASC),
   CONSTRAINT fk_messages_conversations1
     FOREIGN KEY (`conversation_id`)
     REFERENCES `conversations` (`conversation_id`)

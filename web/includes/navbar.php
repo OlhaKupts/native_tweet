@@ -9,7 +9,7 @@
 ?>        
     <div class="w3-top">
         <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
-          <a href="<?PHP echo $url; ?>/index.php" class="w3-bar-item w3-button"><img src='<?PHP echo $url; ?>/images/logo.png' height='50px'></a>
+          <a href="<?PHP echo $url; ?>/index.php" class="w3-bar-item w3-button"><img src='<?PHP echo $url; ?>/images/NTlogo.png' height='50px'></a>
           <!-- Right-sided navbar links. Hide them on small screens -->
           <div class="w3-right w3-hide-small">
             <a href="<?PHP echo $url; ?>/index.php" class="w3-bar-item w3-button">Home</a>
