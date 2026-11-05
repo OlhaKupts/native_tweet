@@ -1,15 +1,25 @@
 <?php
 require_once __DIR__ . "/../includes/config.php";
-
+//redirect to login page
+$page = $_GET["page"] ?? "login";
+if ($page !== "login" && $page !== "register") {
+    require_once __DIR__ . "/processes/authenticate.php";
+}
 
 include "includes/functions.php";
 include "includes/header.php";
 include "includes/navbar.php";
+
+function e($value) {
+    return htmlspecialchars((string)($value ?? ""), ENT_QUOTES, "UTF-8");
+}
+
 $error = $_SESSION["error"]??"";
-$page = $_GET["page"]??"login";
+unset($_SESSION["error"]);
 
 
-echo "<div class='gerror'>{$error}</div>";
+
+echo "<div class='gerror'>" . e($error) . "</div>";
 
 if($page=="login"){
     require_once "forms/loginForm.php";
@@ -27,11 +37,11 @@ if($page=="login"){
     //Main column data
     echo "<div style='float:left'>";
     echo "<h1>User Profile</h1>";
-    echo "<b>Name:</b>  {$profile_data["first_name"]} {$profile_data["last_name"]}<BR>";
-    echo "<b>Country of Origin:</b>  {$profile_data["original_country_name"]}<BR>";
-    echo "<b>Email:</b>  <a href='mailto:{$profile_data["email"]}'>{$profile_data["email"]}</a><BR>";
-    echo "<b>Role:</b>  {$profile_data["role"]}<BR>";
-    echo "<b>Member Since:</b>  {$profile_data["date_registered"]}<BR>";
+    echo "<b>Name:</b> " . e($profile_data["first_name"]) . " " . e($profile_data["last_name"]) . "<BR>";
+    echo "<b>Country of Origin:</b> " . e($profile_data["original_country_name"]) . "<BR>";
+    echo "<b>Email:</b> <a href='mailto:" . e($profile_data["email"]) . "'>" . e($profile_data["email"]) . "</a><BR>";
+    echo "<b>Role:</b> " . e($profile_data["role"]) . "<BR>";
+    echo "<b>Member Since:</b> " . e($profile_data["date_registered"]) . "<BR>";
     echo "</div>";
 
     echo "<a href='processes/logout.php'>Log out</a>";
@@ -44,7 +54,7 @@ if($page=="login"){
         echo "No languages listed.";
     } else {
         foreach ($spoken_languages as $lang) {
-            echo $lang['LANGUAGE_NAME'];
+            echo e($lang['LANGUAGE_NAME']);
             echo "<br>";
         }
     }
