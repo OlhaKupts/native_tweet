@@ -44,7 +44,9 @@ if($page=="login"){
     echo "<b>Member Since:</b> " . e($profile_data["date_registered"]) . "<BR>";
     echo "</div>";
 
-    echo "<a href='processes/logout.php'>Log out</a>";
+    echo "<form action='processes/logout.php' method='POST' style='display:inline'>
+        <button type='submit'>Log out</button>
+      </form>";
 
     //Side Column Data
     echo "<div style='float:right;margin-right:50px;'>";
