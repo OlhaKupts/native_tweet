@@ -37,8 +37,8 @@ if ($routePart === 'register') {
     $email = trim((string)($data['email'] ?? ''));
     $userpassword = (string)($data['password'] ?? '');
 
-    if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        sendJson(400, ['success' => false, 'message' => 'A valid email address is required.']);
+    if (substr(strtolower($email), -10) !== '@etown.edu') {
+        sendJson(400, ['success' => false, 'message' => 'Only @etown.edu emails can register.']);
     }
 
     if (strlen($userpassword) < 8) {

@@ -77,8 +77,8 @@ function updateUserProfile(int $userId, array $data, bool $adminMode = false): a
 
         if ($field === 'email') {
             $email = trim((string)$data[$field]);
-            if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                sendJson(400, ['success' => false, 'message' => 'A valid email address is required.']);
+            if (substr(strtolower($email), -10) !== '@etown.edu') {
+                sendJson(400, ['success' => false, 'message' => 'Only @etown.edu emails can register.']);
             }
 
             $check_sql = 'SELECT userid FROM users WHERE email = :email AND userid <> :userid';
