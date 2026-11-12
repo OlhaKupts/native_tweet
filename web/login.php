@@ -56,10 +56,57 @@ if($page=="login" || $page=="forgot-password"){
         echo "No languages listed.";
     } else {
         foreach ($spoken_languages as $lang) {
-            echo e($lang['LANGUAGE_NAME']);
-            echo "<br>";
+            switch (e($lang['proficency_level'])) { # show proficiency level as a description instead of a number
+                case 1:
+                    $proficiencyDescription = "Beginner";
+                    break;
+                case 2:
+                    $proficiencyDescription = "Elementary";
+                    break;
+                case 3:
+                    $proficiencyDescription = "Intermediate";
+                    break;
+                case 4:
+                    $proficiencyDescription = "Upper Intermediate";
+                case 5:
+                    $proficiencyDescription = "Native/Fluent";
+            }
+            echo e($lang['LANGUAGE_NAME'])." - ".$proficiencyDescription."<br>";
         }
     }
+    # form to add a new language to the user's profile
+    echo "
+    <form action = '/api/users/$userId/languages' method='POST'>
+        <button type='button' id='toggleSelectBtn' aria-expanded='false' aria-controls='countryWrapper'>+</button>
+
+        <div id='countryWrapper' class='form-group' hidden>
+            <select name='language_id'>
+            <option value='' disabled selected>Choose Language</option>";
+                // Language API
+                $languageDataURL = $mainURL."/api/languages";
+                $languageResponse = getJSONFromURL($languageDataURL);
+                $languages = $languageResponse["data"];
+
+                foreach($languages as $language){
+                    echo "<option value='".$language["LANGUAGE_ID"]."'>";
+                    echo $language["LANGUAGE_NAME"];
+                    echo "</option>";
+                }
+        echo "
+        </select>
+        <select name='proficiency_level'>
+            <option value='' disabled selected>Choose Proficiency Level</option>
+            <option value='1'>1 - Beginner</option>
+            <option value='2'>2 - Elementary</option>
+            <option value='3'>3 - Intermediate</option>
+            <option value='4'>4 - Upper Intermediate</option>
+            <option value='5'>5 - Advanced/Native</option>
+        </select>
+        <br>
+        </div>
+
+        <button type='submit'>Submit</button>
+    </form>";
     echo "<BR><BR><BR>";
 
     //Countries
@@ -102,5 +149,31 @@ if($page=="login" || $page=="forgot-password"){
 //     }
     
 
-//include "includes/footer.php";
+include "includes/footer.php";
 ?>
+<style>
+.form-group {
+    margin-top: 12px;
+    margin-bottom: 16px;
+  }
+</style>
+
+<script>
+  const toggleBtn = document.getElementById('toggleSelectBtn');
+  const selectWrapper = document.getElementById('countryWrapper');
+
+  toggleBtn.addEventListener('click', function () {
+    // Toggle the HTML 'hidden' attribute
+    const isHidden = selectWrapper.hasAttribute('hidden');
+
+    if (isHidden) {
+      selectWrapper.removeAttribute('hidden');
+      toggleBtn.textContent = '−';
+      toggleBtn.setAttribute('aria-expanded', 'true');
+    } else {
+      selectWrapper.setAttribute('hidden', '');
+      toggleBtn.textContent = '+';
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>

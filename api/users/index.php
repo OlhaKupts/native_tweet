@@ -30,7 +30,7 @@ $subResource = $usersIndex !== false ? ($parts[$usersIndex + 2] ?? null) : null;
 After successfully changing your password
 ------------------------------------------------------------
 */
-if ($routePart === 'forgot-password') {
+if ($routePart === 'reset-password') {
     if ($method !== 'POST') {
         sendJson(405, ['success' => false, 'message' => 'Method not allowed.']);
     }
@@ -112,7 +112,7 @@ if ($routePart === 'register') {
     (email, first_name, last_name, date_registered, original_country_id, password)
     VALUES
     (:email, :first_name, :last_name, :date_registered, :original_country_id, :password)";
-    
+
     $insert_params = [
         ':email' => $email,
         ':first_name' => isset($data['first_name']) && trim((string)$data['first_name']) !== '' ? trim((string)$data['first_name']) : null,
@@ -263,7 +263,7 @@ if ($routePart !== null && ctype_digit($routePart) && $subResource === 'language
         
         //Joins the user+spoken_language table on wf_languages by language_id, but displays by language name
         $sql = "
-            SELECT l.LANGUAGE_ID, l.LANGUAGE_NAME
+            SELECT l.LANGUAGE_ID, l.LANGUAGE_NAME, usl.proficency_level
             FROM wf_languages l
             JOIN user_spoken_languages usl ON usl.language_id = l.LANGUAGE_ID
             WHERE usl.userid = :userid
