@@ -2,7 +2,7 @@
 require_once __DIR__ . "/../includes/config.php";
 //redirect to login page
 $page = $_GET["page"] ?? "login";
-if ($page !== "login" && $page !== "register") {
+if ($page !== "login" && $page !== "register" && $page !== "forgot-password") {
     require_once __DIR__ . "/processes/authenticate.php";
 }
 
@@ -21,7 +21,7 @@ unset($_SESSION["error"]);
 
 echo "<div class='gerror'>" . e($error) . "</div>";
 
-if($page=="login"){
+if($page=="login" || $page=="forgot-password"){
     require_once "forms/loginForm.php";
 }else if($page=="register"){
     require_once "forms/registrationForm.php";
