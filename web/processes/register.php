@@ -1,6 +1,6 @@
 <?PHP
 
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 error_reporting(E_ALL & ~E_NOTICE);
 session_start();
 require_once __DIR__ . "/../../includes/config.php";
@@ -24,6 +24,7 @@ $lastName = trim($_POST["last"] ?? "");
 $email = trim($_POST["email"] ?? "");
 $userpassword = $_POST["pass"] ?? "";
 $countryId = $_POST["country_origin"] ?? "";
+$languageId = $_POST["language_origin"] ?? "";
 
 /*
 ------------------------------------------------------------
@@ -36,6 +37,7 @@ if (
     $email === "" ||
     $userpassword === "" ||
     $countryId === ""
+    $languageId === ""
 ) {
     $_SESSION["error"] = "All registration fields are required.";
     header("Location: ../login.php?page=register");
@@ -53,6 +55,11 @@ if (!ctype_digit($countryId)) {
     header("Location: ../login.php?page=register");
     exit;
 }
+if (!ctype_digit($languageId)) {
+    $_SESSION["error"] = "Please select a valid language.";
+    header("Location: ../login.php?page=register");
+    exit;
+}
 
 /*
 ------------------------------------------------------------
@@ -66,6 +73,7 @@ $data = [
     "first_name" => $firstName,
     "last_name" => $lastName,
     "original_country_id" => (int)$countryId
+    "language_id" => (int)$languageId
 ];
 
 $jsonData = json_encode($data);

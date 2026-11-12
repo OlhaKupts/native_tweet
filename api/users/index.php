@@ -41,6 +41,10 @@ if ($routePart === 'register') {
         sendJson(400, ['success' => false, 'message' => 'Only @etown.edu emails can register.']);
     }
 
+    if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        sendJson(400, ['success' => false, 'message' => 'A valid email address is required.']);
+    }
+
     if (strlen($userpassword) < 8) {
         sendJson(400, ['success' => false, 'message' => 'Password must be at least 8 characters long.']);
     }
@@ -71,6 +75,14 @@ if ($routePart === 'register') {
     ];
     
     $userId = WFDatabase::executeSQL($insert_user_sql,$insert_params, true);
+    $languageId = (int)($data['language_id'] ?? 0);
+    if ($languageId > 0) {
+        WFDatabase::executeSQL(
+            "INSERT INTO user_spoken_languages (userid, language_id, proficency_level)
+            VALUES (:userid, :lang, 5)",
+            [':userid' => $userId, ':lang' => $languageId]
+        );
+}
     #TODO: Manage session tokens in the DB eventually
 
     $user_data = getUserById($userId);

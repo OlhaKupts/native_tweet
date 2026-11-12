@@ -54,8 +54,7 @@
         
         Country of Origin:
         <select name='country_origin'>
-            <option>Choose Country</option>
-            <option value="1" selected>United States of America</option>
+            <option value="" selected disabled>Choose Country</option>
             <?php
                 //Need a dynamic drop down list of countries
                 // Define the API URL
@@ -73,8 +72,7 @@
 
         Spoken Language:
         <select name='language_origin'>
-            <option>Choose Language</option>
-            <option value="1" selected>English</option>
+            <option value="" selected disabled>Choose Language</option>
             <?php
                 // Language API
                 $languageDataURL = $mainURL."/api/languages";
