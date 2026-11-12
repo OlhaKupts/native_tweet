@@ -202,6 +202,12 @@ if ($routePart !== null && ctype_digit($routePart) && $subResource === 'language
     //($userIndex+1 = userId, +2 = "languages", +3 = languageId)
     $userId = (int)$routePart;
     $languageId = $parts[$usersIndex + 3] ?? null; // for DELETE /{languageid}
+    if ($method !== 'GET') {
+        $authUserId = requireAuth();
+        if ($authUserId !== $userId) {
+            sendJson(403, ['success' => false, 'message' => 'You can only edit your own languages.']);
+        }
+    }
 
 
     //Gets a list of every langiage that this user speaks, with proficiency
