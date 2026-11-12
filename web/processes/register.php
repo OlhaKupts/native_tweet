@@ -36,7 +36,7 @@ if (
     $lastName === "" ||
     $email === "" ||
     $userpassword === "" ||
-    $countryId === ""
+    $countryId === "" ||
     $languageId === ""
 ) {
     $_SESSION["error"] = "All registration fields are required.";
