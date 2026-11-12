@@ -23,6 +23,54 @@ $parts = explode('/', trim($path, '/'));
 $usersIndex = array_search('users', $parts, true);
 $routePart = $usersIndex !== false ? ($parts[$usersIndex + 1] ?? null) : null;
 $subResource = $usersIndex !== false ? ($parts[$usersIndex + 2] ?? null) : null;
+
+
+/*
+------------------------------------------------------------
+After successfully changing your password
+------------------------------------------------------------
+*/
+if ($routePart === 'forgot-password') {
+    if ($method !== 'POST') {
+        sendJson(405, ['success' => false, 'message' => 'Method not allowed.']);
+    }
+
+    $data = getJsonBody();
+    $email = trim((string)($data['email'] ?? ''));
+    $newPassword = (string)($data['password'] ?? '');
+
+    // Makes sure email is valid
+    if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        sendJson(400, ['success' => false, 'message' => 'Please enter a valid email address.']);
+    }
+
+    // Makes sure password is 8 characters long
+    if (strlen($newPassword) < 8) {
+        sendJson(400, ['success' => false, 'message' => 'Password must be at least 8 characters long.']);
+    }
+
+    // Checks to find user
+    $sql = 'SELECT userid FROM users WHERE email = :email LIMIT 1';
+    $users = WFDatabase::getDataFromSQL($sql, [':email' => $email]);
+
+    $user = $users[0] ?? null;
+
+    if (!$user) {
+        sendJson(404, ['success' => false, 'message' => 'No user found with that email address.']);
+    }
+
+    // Updates the password in the database
+    $updated_password = 'UPDATE users SET password = :password WHERE userid = :userid';
+
+    WFDatabase::executeSQL($updated_password, [
+        ':password' => password_hash($newPassword, PASSWORD_DEFAULT),
+        ':userid' => (int)$user['userid']
+    ]);
+
+    sendJson(200, ['success' => true, 'message' => 'Password updated successfully.']);
+}
+
+
 /*
 ------------------------------------------------------------
 POST /api/users/register

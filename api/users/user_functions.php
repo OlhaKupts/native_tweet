@@ -150,7 +150,7 @@ function updateUserProfile(int $userId, array $data, bool $adminMode = false): a
 // Makes a new token for a user, stores its hash, returns the raw token
 function createSessionToken(int $userId): string {
     $token = bin2hex(random_bytes(32));   // 64 random hex characters
-    $sql = "INSERT INTO user_sessions (userid, token_hash, created_at, expires_at)
+    $sql = "INSERT INTO api_sessions (userid, token_hash, created_at, expires_at)
             VALUES (:userid, :hash, :created, :expires)";
     WFDatabase::executeSQL($sql, [
         ':userid'  => $userId,
@@ -176,7 +176,7 @@ function requireAuth(): int {
     if ($token === null) {
         sendJson(401, ['success' => false, 'message' => 'Not logged in.']);
     }
-    $sql = "SELECT userid FROM user_sessions
+    $sql = "SELECT userid FROM api_sessions
             WHERE token_hash = :hash AND revoked_at IS NULL AND expires_at > :now
             LIMIT 1";
     $rows = WFDatabase::getDataFromSQL($sql, [
@@ -191,7 +191,7 @@ function requireAuth(): int {
 
 // Kills a token so it can't be used again
 function revokeSessionToken(string $token): void {
-    $sql = "UPDATE user_sessions SET revoked_at = :now
+    $sql = "UPDATE api_sessions SET revoked_at = :now
             WHERE token_hash = :hash AND revoked_at IS NULL";
     WFDatabase::executeSQL($sql, [
         ':now'  => date('Y-m-d H:i:s'),

@@ -18,6 +18,91 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
+
+/*
+--------------------------------------------------------------
+Forgot Password Feature
+--------------------------------------------------------------
+*/
+
+if (($_POST["action"] ?? "") === "forgot-password") {
+
+    $email = trim($_POST["email"] ?? "");
+    $newPassword = $_POST["new_password"] ?? "";
+    $confirmPassword = $_POST["confirm_password"] ?? "";
+
+    // This makes sure all fields are filled out
+    if ($email === "" || $newPassword === "" || $confirmPassword === "") {
+        $_SESSION["error"] = "All fields are required to be filled.";
+        header("Location: ../login.php?page=forgot-password");
+        exit;
+    }
+
+    // Check email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION["error"] = "Please enter a valid email address.";
+        header("Location: ../login.php?page=forgot-password");
+        exit;
+    }
+
+    // Checks the password length
+    if (strlen($newPassword) < 8) {
+        $_SESSION["error"] = "Password must be at least 8 characters long.";
+        header("Location: ../login.php?page=forgot-password");
+        exit;
+    }
+
+    // Check if passwords match
+    if ($newPassword !== $confirmPassword) {
+        $_SESSION["error"] = "Password doesn't match.";
+        header("Location: ../login.php?page=forgot-password");
+        exit;
+    }
+
+    // Updates information for the API
+    $data = [
+        "email" => $email,
+        "password" => $newPassword
+    ];
+
+    $options = [
+        "http" => [
+            "method" => "POST",
+            "header" => "Content-Type: application/json\r\n",
+            "content" => json_encode($data),
+            "ignore_errors" => true
+        ]
+    ];
+
+    $context = stream_context_create($options);
+
+    $response = file_get_contents(
+        $mainURL . "/api/users/reset-password",
+        false,
+        $context
+    );
+
+    if ($response === false) {
+        $_SESSION["error"] = "Unable to reset password.";
+        header("Location: ../login.php?page=forgot-password");
+        exit;
+    }
+
+    $result = json_decode($response, true);
+
+    if (is_array($result) && ($result["success"] ?? false) === true) {
+        $_SESSION["error"] = "Password updated successfully. You can now log in.";
+        header("Location: ../login.php?page=login");
+        exit;
+    }
+
+    $_SESSION["error"] = $result["message"] ?? "Unable to reset password.";
+
+    header("Location: ../login.php?page=forgot-password");
+    exit;
+}
+
+
 /*
 --------------------------------------------------------------
 Read form values.
