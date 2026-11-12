@@ -72,7 +72,7 @@ $data = [
     "password" => $userpassword,
     "first_name" => $firstName,
     "last_name" => $lastName,
-    "original_country_id" => (int)$countryId
+    "original_country_id" => (int)$countryId,
     "language_id" => (int)$languageId
 ];
 
