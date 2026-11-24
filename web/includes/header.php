@@ -1,5 +1,7 @@
 <?php
-$url = "/native_tweet/web";
+if (!isset($url)) {
+    $url = function_exists('url') ? url() : '/web';
+}
 require_once __DIR__ . "/language_switch.php";
 ?>
 <!DOCTYPE html>
