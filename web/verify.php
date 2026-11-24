@@ -11,13 +11,15 @@ if (!function_exists('e')) {
     }
 }
 
-$token = trim($_GET['token'] ?? '');
+$message = "";
 $success = false;
+$showButton = false;
 
-if ($token === '') {
-    $message = "No verification token was provided.";
-} else {
-    $result = apiRequest("POST", $mainURL . "/api/users/verify", ["token" => $token]);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Button was clicked: verify now
+    $token = trim($_POST['token'] ?? '');
+    $result = $token === '' ? null
+        : apiRequest("POST", $mainURL . "/api/users/verify", ["token" => $token]);
 
     if ($result === null) {
         $message = "Verification isn't working right now. Try again later.";
@@ -25,13 +27,27 @@ if ($token === '') {
         $success = !empty($result['success']);
         $message = $result['message'] ?? "Something went wrong.";
     }
+} else {
+    // Link was opened: just show the button (email scanners won't click it)
+    $token = trim($_GET['token'] ?? '');
+    if ($token === '') {
+        $message = "No verification token was provided.";
+    } else {
+        $showButton = true;
+    }
 }
 ?>
 
 <h2>Email Verification</h2>
 
 <div class="w3-section">
-    <?php if ($success): ?>
+    <?php if ($showButton): ?>
+        <p>Click the button below to verify your Native Tweet account.</p>
+        <form method="POST" action="verify.php">
+            <input type="hidden" name="token" value="<?php echo e($token); ?>">
+            <input type="submit" value="Verify my email">
+        </form>
+    <?php elseif ($success): ?>
         <p><?php echo e($message); ?></p>
         <p><a href="login.php?page=login">Go to login</a></p>
     <?php else: ?>

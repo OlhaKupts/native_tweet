@@ -210,7 +210,8 @@ function isValidEtownEmail(string $email): bool {
     return substr(strtolower($email), -10) === '@etown.edu';
 }
 
-function createEmailVerification(int $userid, string $email): bool {
+// Creates a verification link and emails it to the user
+function createEmailVerification(int $userId, string $email): bool {
     global $mainURL;
 
     $token = bin2hex(random_bytes(32));
